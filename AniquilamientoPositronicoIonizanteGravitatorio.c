@@ -54,6 +54,22 @@ static bool is_eline() {
     return b;
 }
 
+static int compare_vertix(const void *a, const void *b) {
+    u32 l = *((u32 *)a);
+    u32 r = *((u32 *)b);
+    int res;
+    if (l < r) {
+        res = -1;
+    }
+    else if (l > r) {
+        res = 1;
+    }
+    else {
+        res = 0;
+    }
+    return res;
+}
+
 static int sort_tuple(const void *a, const void *b) {
     u32 l = ((struct tupla_s *)a)->v1;
     u32 r = ((struct tupla_s *)b)->v1;
@@ -90,6 +106,15 @@ static void set_name_degree_neighbors_delta(u32 n_edge, u32 n_vertix, u32* t_nam
         }
         t_degree[i] = j-init;
         i++;
+    }
+    i = 0u;
+    while(i < n_vertix) {
+        for(u32 k = 0u; k < t_degree[i]; k++) {
+            u32 elem = t_neighbors[i][k];
+            u32* j = bsearch(&elem, t_name, n_vertix, sizeof(u32), compare_vertix);
+            t_neighbors[i][k] = j - t_name;
+        }
+        ++i;
     }
     graph->delta = max;
     graph->nombres = t_name;
@@ -253,7 +278,7 @@ u32 IndiceONVecino(u32 j,u32 k,Grafo G) {
     u32 r = 4294967295u;
 
     if (k < G->n && j < G->grados[k]) {
-        r = G->vecinos[k][j]; 
+        r = G->vecinos[k][j];
     }
 
     return r;
