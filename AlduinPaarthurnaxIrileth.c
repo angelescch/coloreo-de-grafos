@@ -1,31 +1,60 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>
+#include <math.h>
 
 #include "AlduinPaarthurnaxIrileth.h"
 
+// Retorna el minimo color disponible para colorear el vertice i en {1,2}, tal que el
+// coloreo es propio. Retorna NULL si no hay color disponible en {1,2}. 
+static u32* get_color(u32 i,Grafo G, u32* colores) {
+    u32 grad_i = Grado(i, G);
+    u32* res = NULL;
+    const u32 c1 = 1u;
+    const u32 c2 = 2u;
+    bool c1_disp = false;
+    bool c2_disp = false;
+
+    u32 k = 0u;
+    while (k < grad_i && (c1_disp || c2_disp)) {
+        u32 vec_index = IndiceONVecino(k,i,G);
+        u32 IONerr = (u32)(pow(2,32)-1);
+        // si IndiceONVecino no dio error...
+        if (vec_index != IONerr) {
+            u32 c_vec = colores[vec_index];
+            c1_disp = c1_disp && (c_vec!=c1);
+            c2_disp = c2_disp && (c_vec!=c2);
+        }
+        ++k;
+    }
+    if (c1_disp) *res = c1;
+    else if (c2_disp) *res = c2;
+
+    return res;
+}
+
 u32* Bipartito(Grafo  G) {
-    u32 n = NumeroDeVertices(G);
+    u32 n_vert = NumeroDeVertices(G);
     bool es_bipartito = true;
-    // colors[i] = devuelve el color del vertice cuyo indice es i
-    u32* colors = calloc(n, sizeof(u32));
-
-    // asignar color 1 al primer vertice
-    // asignar el color 2 a sus vecinos (se conserva que sea propio)
+    u32* colores = calloc(n_vert, sizeof(u32));
+    u32* col = NULL;
     
-    // iterar sobre los vertices siguientes
-        // si alguno de sus vecinos tienen un color
-            // if ("sus vecinos ocupan a lo sumo un color")
-                // se le asigna el color opuesto y se seguira con otro vertice
-            // else ("sus vecinos hacen uso de 2 colores")
-                // es_bipartito = false
-                // break
-
-    if (!es_bipartito) {
-        free(colors);
+    u32 i = 0u;
+    while (es_bipartito && i < n_vert) {
+        col = get_color(i,G,colores);
+        if (col != NULL) {
+            colores[i] = *col;
+        }
+        else {
+            es_bipartito = false;
+            free(colores);
+            colores = NULL;
+            break;
+        }
+        ++i;
     }
 
-    return colors;
+    return colores;
 }
 
 u32 Greedy(Grafo G,u32* Orden,u32* Coloreo) {
