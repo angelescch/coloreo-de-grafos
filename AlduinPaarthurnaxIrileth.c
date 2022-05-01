@@ -12,8 +12,8 @@ static u32* get_color(u32 i,Grafo G, u32* colores) {
     u32* res = NULL;
     const u32 c1 = 1u;
     const u32 c2 = 2u;
-    bool c1_disp = false;
-    bool c2_disp = false;
+    bool c1_disp = true;
+    bool c2_disp = true;
 
     u32 k = 0u;
     while (k < grad_i && (c1_disp || c2_disp)) {
@@ -25,10 +25,21 @@ static u32* get_color(u32 i,Grafo G, u32* colores) {
             c1_disp = c1_disp && (c_vec!=c1);
             c2_disp = c2_disp && (c_vec!=c2);
         }
+        else {
+            printf("Error en IndiceONVecino.");
+            break;
+        }
         ++k;
     }
-    if (c1_disp) *res = c1;
-    else if (c2_disp) *res = c2;
+    // devuelve el c1 si esta disponible, sino el c2 si esta disponible...
+    if (c1_disp) {
+        res = malloc(sizeof(u32));
+        *res = c1;
+    }
+    else if (c2_disp) {
+        res = malloc(sizeof(u32));
+        *res = c2;
+    }
 
     return res;
 }
@@ -49,7 +60,6 @@ u32* Bipartito(Grafo  G) {
             es_bipartito = false;
             free(colores);
             colores = NULL;
-            break;
         }
         ++i;
     }
@@ -57,28 +67,28 @@ u32* Bipartito(Grafo  G) {
     return colores;
 }
 
-u32 Greedy(Grafo G,u32* Orden,u32* Coloreo) {
+// u32 Greedy(Grafo G,u32* Orden,u32* Coloreo) {
 
-}
+// }
 
-//ordenamiento a partir de clave
+// //ordenamiento a partir de clave
 
-char OrdenFromKey(u32 n,u32* key,u32* Orden) {
+// char OrdenFromKey(u32 n,u32* key,u32* Orden) {
 
-}
+// }
 
-//claves aleatorias
+// //claves aleatorias
 
-void AleatorizarKeys(u32 n,u32 R,u32* key) {
+// void AleatorizarKeys(u32 n,u32 R,u32* key) {
 
-}
+// }
 
 
-//permutadores de colores
-u32* PermutarColores(u32 n,u32* Coloreo,u32 R) {
+// //permutadores de colores
+// u32* PermutarColores(u32 n,u32* Coloreo,u32 R) {
 
-}
+// }
 
-u32* RecoloreoCardinalidadDecrecienteBC(u32 n,u32* Coloreo) {
+// u32* RecoloreoCardinalidadDecrecienteBC(u32 n,u32* Coloreo) {
 
-}
+// }
