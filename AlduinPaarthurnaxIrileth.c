@@ -1,71 +1,52 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>
-#include <math.h>
+#include <limits.h>
 
 #include "AlduinPaarthurnaxIrileth.h"
-
-// Retorna el minimo color disponible para colorear el vertice i en {1,2}, tal que el
-// coloreo es propio. Retorna NULL si no hay color disponible en {1,2}. 
-static u32* get_color(u32 i,Grafo G, u32* colores) {
-    u32 grad_i = Grado(i, G);
-    u32* res = NULL;
-    const u32 c1 = 1u;
-    const u32 c2 = 2u;
-    bool c1_disp = true;
-    bool c2_disp = true;
-
-    u32 k = 0u;
-    while (k < grad_i && (c1_disp || c2_disp)) {
-        u32 vec_index = IndiceONVecino(k,i,G);
-        u32 IONerr = (u32)(pow(2,32)-1);
-        // si IndiceONVecino no dio error...
-        if (vec_index != IONerr) {
-            u32 c_vec = colores[vec_index];
-            c1_disp = c1_disp && (c_vec!=c1);
-            c2_disp = c2_disp && (c_vec!=c2);
-        }
-        else {
-            printf("Error en IndiceONVecino.");
-            break;
-        }
-        ++k;
-    }
-    // devuelve el c1 si esta disponible, sino el c2 si esta disponible...
-    if (c1_disp) {
-        res = malloc(sizeof(u32));
-        *res = c1;
-    }
-    else if (c2_disp) {
-        res = malloc(sizeof(u32));
-        *res = c2;
-    }
-
-    return res;
-}
+#include "stack.h"
 
 u32* Bipartito(Grafo  G) {
-    u32 n_vert = NumeroDeVertices(G);
-    bool es_bipartito = true;
-    u32* colores = calloc(n_vert, sizeof(u32));
-    u32* col = NULL;
-    
-    u32 i = 0u;
-    while (es_bipartito && i < n_vert) {
-        col = get_color(i,G,colores);
-        if (col != NULL) {
-            colores[i] = *col;
+    u32 n = NumeroDeVertices(G);
+    u32 * colores = calloc(n, sizeof(u32));
+    stack vertex_stack = stack_empty();
+    colores[0u] = 1u;
+    u32 grado_0 = Grado(0u,G);
+
+    for (u32 j=0u; j < grado_0;++j) {
+        vertex_stack = stack_push(vertex_stack, IndiceONVecino(j,0u,G));
+    }
+
+    while (!stack_is_empty(vertex_stack)) {
+        bool posible_1 = true;
+        bool posible_2 = true;
+        u32 i = stack_top(vertex_stack);
+        vertex_stack = stack_pop(vertex_stack);
+
+        for (u32 j=0u; j < Grado(i,G) ;++j) {
+            if (colores[IndiceONVecino(j,i,G)]==1u) {
+                posible_1 = false; 
+            } else if (colores[IndiceONVecino(j,i,G)]==2u) {
+                posible_2 = false;
+            } else if (colores[IndiceONVecino(j,i,G)]==0u) {
+                vertex_stack = stack_push(vertex_stack, IndiceONVecino(j,i,G));
+            }
         }
-        else {
-            es_bipartito = false;
+        
+        if (posible_1) {
+            colores[i] = 1u;
+        } else if (posible_2) {
+            colores[i] = 2u;
+        } else {
             free(colores);
             colores = NULL;
+            break;
         }
-        ++i;
     }
 
     return colores;
 }
+
 
 // u32 Greedy(Grafo G,u32* Orden,u32* Coloreo) {
 
