@@ -1,10 +1,10 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>
-#include <limits.h>
+#include <inttypes.h>
 
 #include "AlduinPaarthurnaxIrileth.h"
-#include "stack.h"
+#include "Stack.h"
 
 u32* Bipartito(Grafo  G) {
     u32 n = NumeroDeVertices(G);
@@ -32,7 +32,7 @@ u32* Bipartito(Grafo  G) {
                 vertex_stack = stack_push(vertex_stack, IndiceONVecino(j,i,G));
             }
         }
-        
+
         if (posible_1) {
             colores[i] = 1u;
         } else if (posible_2) {
@@ -48,9 +48,15 @@ u32* Bipartito(Grafo  G) {
 }
 
 
-// u32 Greedy(Grafo G,u32* Orden,u32* Coloreo) {
+u32 Greedy(Grafo G,u32* Orden,u32* Coloreo) {
+    u32 cant_colores = UINT32_MAX;
+    Coloreo[Orden[0]] = 0u;
+    // Orden[1] = siguiente vértice;
+    // vecino de orden[0] --> 1 else --> 0
+    // estructura de colores usados
 
-// }
+    return cant_colores;
+}
 
 // //ordenamiento a partir de clave
 
