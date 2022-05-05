@@ -12,7 +12,7 @@
 // cuyo indice es i en el orden natural. 
 u32* Bipartito(Grafo  G);
 
-// u32 Greedy(Grafo G,u32* Orden,u32* Coloreo);
+u32 Greedy(Grafo G,u32* Orden,u32* Coloreo);
 
 // //ordenamiento a partir de clave
 

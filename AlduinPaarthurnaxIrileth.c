@@ -49,12 +49,19 @@ u32* Bipartito(Grafo  G) {
 
 
 u32 Greedy(Grafo G,u32* Orden,u32* Coloreo) {
-    u32 cant_colores = UINT32_MAX;
-    Coloreo[Orden[0]] = 0u;
-    // Orden[1] = siguiente vértice;
-    // vecino de orden[0] --> 1 else --> 0
-    // estructura de colores usados
-
+    u32 cant_colores = 0;
+    u32 n = NumeroDeVertices(G);
+    u32* buffer = calloc(n, sizeof(u32));
+    for(u32 i = 0; i < n; ++i) {
+        Coloreo[Orden[i]] = buffer[Orden[i]];
+        if (buffer[Orden[i]]+1 > cant_colores) {
+            cant_colores = buffer[Orden[i]]+1;
+        }
+        u32 grado_Orden_i = Grado(Orden[i],G);
+        for (u32 j = 0; j < grado_Orden_i; ++j){
+            ++buffer[IndiceONVecino(j,Orden[i],G)];
+        }
+    }
     return cant_colores;
 }
 
