@@ -49,19 +49,54 @@ u32* Bipartito(Grafo  G) {
 
 
 u32 Greedy(Grafo G,u32* Orden,u32* Coloreo) {
-    u32 cant_colores = 0;
     u32 n = NumeroDeVertices(G);
-    u32* buffer = calloc(n, sizeof(u32));
-    for(u32 i = 0; i < n; ++i) {
-        Coloreo[Orden[i]] = buffer[Orden[i]];
-        if (buffer[Orden[i]]+1 > cant_colores) {
-            cant_colores = buffer[Orden[i]]+1;
+    u32 cant_colores = 1u;
+
+    // Assign the first color to first vertex
+    Coloreo[Orden[0]] = 0u;
+
+    // Initialize remaining V-1 vertices as unassigned
+    for (unsigned int u = 1; u < n; u++)
+        Coloreo[Orden[u]] = UINT32_MAX; // no color is assigned to u
+
+    // A temporary array to store the available colors. True
+    // value of available[cr] would mean that the color cr is
+    // assigned to one of its adjacent vertices
+    bool available[n];
+    for (unsigned int cr = 0; cr < n; cr++)
+        available[cr] = false;
+
+
+    // Assign colors to remaining V-1 vertices
+    for (unsigned int u = 1; u < n; u++) {
+
+        // Process all adjacent vertices and flag their colors
+        // as unavailable
+        u32 grado_i = Grado(Orden[u],G);
+        for(u32 j = 0u; j < grado_i; ++j) {
+            if (Coloreo[IndiceONVecino(j,Orden[u],G)]!=UINT32_MAX)
+                available[Coloreo[IndiceONVecino(j,Orden[u],G)]] = true;
         }
-        u32 grado_Orden_i = Grado(Orden[i],G);
-        for (u32 j = 0; j < grado_Orden_i; ++j){
-            ++buffer[IndiceONVecino(j,Orden[i],G)];
+
+        // Find the first available color
+        unsigned int cr;
+        for (cr = 0; cr < n; cr++) {
+            if (available[cr] == false)
+                break;
+        }
+
+        Coloreo[Orden[u]] = cr; // Assign the found color
+
+        if (cr+1 > cant_colores)
+            cant_colores = cr+1; // Update how many colors we already use
+
+        // Reset the values back to false for the next iteration
+        for(u32 j = 0u; j < grado_i; ++j) {
+            if (Coloreo[IndiceONVecino(j,Orden[u],G)]!=UINT32_MAX)
+                available[Coloreo[IndiceONVecino(j,Orden[u],G)]] = false;
         }
     }
+
     return cant_colores;
 }
 

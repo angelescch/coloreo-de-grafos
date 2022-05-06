@@ -21,6 +21,6 @@ int main(){
         orden[i] = i;
     }
     u32 colores_usados = Greedy(g, orden, colorcitos);
-    printf("cantidad de colores que usa Greedy: %u", colores_usados);
+    printf("cantidad de colores que usa Greedy: %u\n", colores_usados);
     return 0;
 }
