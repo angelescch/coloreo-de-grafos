@@ -70,7 +70,7 @@ static int compare_vertix(const void *a, const void *b) {
     return res;
 }
 
-static int sort_tuple(const void *a, const void *b) {
+int sort_tuple(const void *a, const void *b) {
     u32 l = ((struct tupla_s *)a)->v1;
     u32 r = ((struct tupla_s *)b)->v1;
     int res;

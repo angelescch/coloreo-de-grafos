@@ -14,13 +14,13 @@ u32* Bipartito(Grafo  G);
 
 u32 Greedy(Grafo G,u32* Orden,u32* Coloreo);
 
-// //ordenamiento a partir de clave
+//ordenamiento a partir de clave
 
-// char OrdenFromKey(u32 n,u32* key,u32* Orden);
+char OrdenFromKey(u32 n,u32* key,u32* Orden);
 
 // //claves aleatorias
 
-// void AleatorizarKeys(u32 n,u32 R,u32* key);
+void AleatorizarKeys(u32 n,u32 R,u32* key);
 
 
 // //permutadores de colores
