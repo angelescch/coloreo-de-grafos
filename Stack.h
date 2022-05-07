@@ -10,12 +10,6 @@
 /**
 * @brief Stack type definition
 */
-typedef struct value_index_s* valueIndex;
-
-struct value_index_s {
-    u32 value;
-    u32 index;
-};
 
 /**
 * @brief Stack type definition

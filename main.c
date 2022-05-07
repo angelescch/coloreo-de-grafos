@@ -1,3 +1,4 @@
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>
@@ -15,11 +16,17 @@ int main(){
     // } else {
     //     printf(":(\n");
     // }
+
     u32 n = NumeroDeVertices(g);
-    u32 * key = calloc(7, sizeof(u32));
+    u32 * key = calloc(n, sizeof(u32));
     u32 * orden = calloc(n, sizeof(u32));
+    u32 * coloreo = calloc(n, sizeof(u32));
     for (u32 i = 0 ; i < n; ++i) {
         orden[i] = i;
+    }
+    u32 colores_usados = Greedy(g, orden,coloreo);
+    for (u32 i= 0; i < n; i++) {
+        printf("coloreo de greedy[%u]: %u\n",i,coloreo[i]);
     }
     key[0] = 1;
     key[1] = 2;
@@ -33,12 +40,22 @@ int main(){
     for (u32 i= 0; i < n; i++) {
         printf("array: %u\n",orden[i]);
     }
+    u32* coloreonovo = PermutarColores(n,coloreo, 1);
+    for (u32 i= 0; i < n; i++) {
+        printf("permutado[%u]: %u\n",i,coloreonovo[i]);
+    }
 
+
+    free(key);
+    free(orden);
+    free(coloreo);
+    free(coloreonovo);
+    DestruccionDelGrafo(g);
     // clock_t start = clock();
     // u32 colores_usados = Greedy(g, orden, colorcitos);
     // clock_t end = clock();
     // float seconds = (float)(end - start) / CLOCKS_PER_SEC;
-    // printf("cantidad de colores que usa Greedy: %u\n", colores_usados);
+    printf("cantidad de colores que usa Greedy: %u\n", colores_usados);
     // printf("tarda %f\n",seconds);
     return 0;
 }
