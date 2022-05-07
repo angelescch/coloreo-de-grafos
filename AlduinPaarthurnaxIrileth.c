@@ -132,9 +132,35 @@ void AleatorizarKeys(u32 n,u32 R,u32* key) {
 
 
 //permutadores de colores
-// u32* PermutarColores(u32 n,u32* Coloreo,u32 R) {
+u32* PermutarColores(u32 n,u32* Coloreo,u32 R) {
+    u32* ColoreoNuevo = calloc(n, sizeof(u32));
+    u32 r = 0u;
 
-// }
+    Coloreo[i] = 5
+    ---->ColoreoNuevo[i] = 9
+
+    para i<j, Coloreo[j] if (coloreo[j]== coloreo[k] con k<j) then ColoreoNuevo[j] = ColoreoNuevo[k]
+
+    PermC[5]=15 % 20;15
+    .
+    .
+    Perm[15]=25 % 20;5
+    .
+    PermC[r-1]=;
+
+    for (u32 i=0u; i < n ;++i) {
+        if (Coloreo[i]>r) {
+            r = Coloreo[i];
+        }
+    }
+    if (ColoreoNuevo != NULL) {
+        for (u32 i=0u; i<n ;++i) {
+            if ()
+        }
+    }
+
+    return ColoreoNuevo;
+}
 
 // u32* RecoloreoCardinalidadDecrecienteBC(u32 n,u32* Coloreo) {
 
