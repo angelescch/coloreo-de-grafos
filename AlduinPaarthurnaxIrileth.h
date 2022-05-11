@@ -26,7 +26,7 @@ void AleatorizarKeys(u32 n,u32 R,u32* key);
 //permutadores de colores
 u32* PermutarColores(u32 n,u32* Coloreo,u32 R);
 
-// u32* RecoloreoCardinalidadDecrecienteBC(u32 n,u32* Coloreo);
+u32* RecoloreoCardinalidadDecrecienteBC(u32 n,u32* Coloreo);
 
 
 
