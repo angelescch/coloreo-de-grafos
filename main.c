@@ -28,28 +28,30 @@ int main(){
     for (u32 i= 0; i < n; i++) {
         printf("coloreo de greedy[%u]: %u\n",i,coloreo[i]);
     }
-    key[0] = 1;
-    key[1] = 2;
-    key[2] = 6;
-    key[3] = 6;
-    key[4] = 0;
-    key[5] = 4;
-    key[6] = 5;
+    AleatorizarKeys(n, 457568,key);
+    for (u32 i= 0; i < n; i++) {
+        printf("key[%u]: %u\n",i,key[i]);
+    }
     char a = OrdenFromKey(n,key,orden);
     a = a;
     for (u32 i= 0; i < n; i++) {
-        printf("array: %u\n",orden[i]);
+        printf("orden[%u]: %u\n",i,orden[i]);
     }
-    u32* coloreonovo = PermutarColores(n,coloreo, 1);
+    u32* coloreonovo = PermutarColores(n,coloreo, 4);
     for (u32 i= 0; i < n; i++) {
-        printf("permutado[%u]: %u\n",i,coloreonovo[i]);
+        printf("permutado coloreo de greedy[%u]: %u\n",i,coloreonovo[i]);
     }
 
+    u32 *RecoloreoCardinal = RecoloreoCardinalidadDecrecienteBC(n, coloreo);
+    for (u32 i= 0; i < n; i++) {
+        printf("recoloreo de greedy[%u]: %u\n",i,RecoloreoCardinal[i]);
+    }
 
     free(key);
     free(orden);
     free(coloreo);
     free(coloreonovo);
+    free(RecoloreoCardinal);
     DestruccionDelGrafo(g);
     // clock_t start = clock();
     // u32 colores_usados = Greedy(g, orden, colorcitos);

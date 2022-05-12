@@ -6,6 +6,29 @@
 #include "AlduinPaarthurnaxIrileth.h"
 #include "Stack.h"
 
+typedef struct tuple_s* tuple;
+
+struct tuple_s {
+    u32 v1;
+    u32 v2;
+};
+
+static int sort_tuple(const void *a, const void *b) {
+    u32 l = ((struct tuple_s *)a)->v1;
+    u32 r = ((struct tuple_s *)b)->v1;
+    int res;
+    if (l < r) {
+        res = -1;
+    }
+    else if (l > r) {
+        res = 1;
+    }
+    else {
+        res = 0;
+    }
+    return res;
+}
+
 u32* Bipartito(Grafo  G) {
     u32 n = NumeroDeVertices(G);
     u32 * colores = calloc(n, sizeof(u32));
@@ -100,14 +123,14 @@ u32 Greedy(Grafo G,u32* Orden,u32* Coloreo) {
 //ordenamiento a partir de clave
 
 char OrdenFromKey(u32 n,u32* key,u32* Orden) {
-    tupla value_index = calloc(n, sizeof(struct tupla_s));
+    tuple value_index = calloc(n, sizeof(struct tuple_s));
     if (value_index == NULL)
         return '1';
     for(u32 i = 0u; i < n; ++i) {
         value_index[i].v1 = key[i];
         value_index[i].v2 = i;
     }
-    qsort((void*)value_index, n, sizeof(struct tupla_s), sort_tuple);
+    qsort((void*)value_index, n, sizeof(struct tuple_s), sort_tuple);
     u32 i = n-1u;
     u32 j = 0u;
     while(j < n) {
@@ -163,7 +186,7 @@ u32* PermutarColores(u32 n,u32* Coloreo,u32 R) {
 
 u32* RecoloreoCardinalidadDecrecienteBC(u32 n,u32* Coloreo) {
     u32* NuevoColoreo = calloc(n,sizeof(u32));
-    tupla ConteoColores = calloc(n,sizeof(struct tupla_s));
+    tuple ConteoColores = calloc(n,sizeof(struct tuple_s));
 
 
     if (NuevoColoreo!=NULL && ConteoColores!=NULL) {
@@ -173,14 +196,14 @@ u32* RecoloreoCardinalidadDecrecienteBC(u32 n,u32* Coloreo) {
             ConteoColores[Coloreo[i]].v2 = Coloreo[i];
         }
 
-        qsort((void*)ConteoColores, n, sizeof(struct tupla_s), sort_tuple);
-
-        u32 r = 0u;      // cuenta colores
-        for (u32 i = 0; i < n; ++i) {
-            if (ConteoColores[Coloreo[i]].v1 == 0)
-                break;
-            ++r;
+        u32 r = Coloreo[0];      // cuenta colores
+        for (u32 i = 1; i < n; ++i) {
+            if (r < Coloreo[i])
+                r = Coloreo[i];
         }
+        ++r;
+
+        qsort((void*)ConteoColores, r, sizeof(struct tuple_s), sort_tuple);
 
         u32* CambiarColor = calloc(r,sizeof(u32));
         if (CambiarColor == NULL) return NULL;
@@ -197,10 +220,13 @@ u32* RecoloreoCardinalidadDecrecienteBC(u32 n,u32* Coloreo) {
             NuevoColoreo[i] = CambiarColor[Coloreo[i]];
         }
 
+        free(CambiarColor);
 
     } else {
         NuevoColoreo = NULL;
     }
+
+    free(ConteoColores);
 
     return NuevoColoreo;
 }

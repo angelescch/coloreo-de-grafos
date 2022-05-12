@@ -41,7 +41,6 @@ u32 Nombre(u32 i,Grafo G);
 u32 Grado(u32 i,Grafo G);
 //vecinos info
 u32 IndiceONVecino(u32 j,u32 k,Grafo G);
-int sort_tuple(const void *a, const void *b);
 
 
 
