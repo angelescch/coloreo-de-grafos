@@ -6,34 +6,92 @@
 #include "AlduinPaarthurnaxIrileth.h"
 #include "AniquilamientoPositronicoIonizanteGravitatorio.h"
 
-int main(){
+int main(int argc, char* argv[]){
+    argc = argc;
+    u32 cantidad_colores_usados, R;
+    char error;
+    int alpha = atoi(argv[1]), beta = atoi(argv[2]), rho = atoi(argv[3]);
+    beta = beta;
     Grafo g = ConstruccionDelGrafo();
-    // u32* colorcitos = Bipartito(g);
-    // if(colorcitos!=NULL){
-    //     for (u32 i= 0; i < n; i++) {
-    //         printf("array: %u\n",colorcitos[i]);
-    //     }
-    // } else {
-    //     printf(":(\n");
-    // }
 
     u32 n = NumeroDeVertices(g);
+    u32 m = NumeroDeLados(g);
+    u32 d = Delta(g);
+
+    printf("Número de vértices: %u, Número de lados: %u, Delta del grafo: %u\n", n, m, d);
+
+    // Bipartito
+    u32* colorcitos = Bipartito(g);
+    if(colorcitos!=NULL){
+        printf("El grafo es bipartito\n");
+        if (n < 101) {
+            printf("\n\nListado de vértices de la Primera Parte:\n");
+            printf("[");
+            for (u32 i; i<n ;++i) {
+                if (colorcitos[i]==1) {
+                    printf("%u, ", Nombre(i,g));
+                }
+            }
+            printf("]\n\n");
+
+            printf("\n\nListado de vértices de la Segunda Parte:\n");
+            printf("[");
+            for (u32 i; i<n ;++i) {
+                if (colorcitos[i]==2) {
+                    printf("%u, ", Nombre(i,g));
+                }
+            }
+            printf("]\n\n");
+        }
+    } else {
+        printf("\nEl grafo no es bipartito\n");
+    }
+
     u32 * key = calloc(n, sizeof(u32));
     u32 * orden = calloc(n, sizeof(u32));
     u32 * coloreo = calloc(n, sizeof(u32));
+
+
+    // crea orden natural
     for (u32 i = 0 ; i < n; ++i) {
         orden[i] = i;
     }
-    u32 colores_usados = Greedy(g, orden,coloreo);
+    cantidad_colores_usados = Greedy(g, orden, coloreo);
+    printf("Cantidad de colores que usa Greedy en ON: %u\n", cantidad_colores_usados);
+
+    // crea orden Welsh-Powell
+    for (u32 i = 0 ; i < n; ++i) {
+        key[i]=Grado(i,g);
+    }
+    error = OrdenFromKey(n, key, orden);
+    cantidad_colores_usados = Greedy(g, orden, coloreo);
+    printf("Cantidad de colores que usa Greedy en Welsh-Powell: %u\n", cantidad_colores_usados);
+
+    for(int i = 0; i < alpha; ++i) {
+        srand(rho);
+        R = rand();
+        rho = R;
+        AleatorizarKeys(n, R,key);
+        error = OrdenFromKey(n, key, orden);
+        error = error;
+        cantidad_colores_usados = Greedy(g, orden, coloreo);
+        printf("Cantidad de colores que usa Greedy en reordenamiento %u: %u\n",i+3, cantidad_colores_usados);
+    }
+
+
+
+    u32 colores_usados = Greedy(g, orden, coloreo);
     for (u32 i= 0; i < n; i++) {
         printf("coloreo de greedy[%u]: %u\n",i,coloreo[i]);
     }
+
     AleatorizarKeys(n, 457568,key);
     for (u32 i= 0; i < n; i++) {
         printf("key[%u]: %u\n",i,key[i]);
     }
-    char a = OrdenFromKey(n,key,orden);
-    a = a;
+
+    char h = OrdenFromKey(n,key,orden);
+    h = h;
     for (u32 i= 0; i < n; i++) {
         printf("orden[%u]: %u\n",i,orden[i]);
     }
