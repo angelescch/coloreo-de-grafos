@@ -3,12 +3,13 @@
 #include <stdlib.h>
 #include <stdbool.h>
 #include <time.h>
+#include <inttypes.h>
 #include "AlduinPaarthurnaxIrileth.h"
 #include "AniquilamientoPositronicoIonizanteGravitatorio.h"
 
 int main(int argc, char* argv[]){
     argc = argc;
-    u32 cantidad_colores_usados, R;
+    u32 cantidad_colores_usados, R, cantidad_greedys=0u,  menor_coloreo=UINT32_MAX;
     char error;
     int alpha = atoi(argv[1]), beta = atoi(argv[2]), rho = atoi(argv[3]);
     beta = beta;
@@ -20,7 +21,7 @@ int main(int argc, char* argv[]){
 
     printf("Número de vértices: %u, Número de lados: %u, Delta del grafo: %u\n", n, m, d);
 
-    // Bipartito
+    // Bipartito.
     u32* colorcitos = Bipartito(g);
     if(colorcitos!=NULL){
         printf("El grafo es bipartito\n");
@@ -47,17 +48,29 @@ int main(int argc, char* argv[]){
         printf("\nEl grafo no es bipartito\n");
     }
 
+    // inicializacion y alocación de arreglos.
     u32 * key = calloc(n, sizeof(u32));
     u32 * orden = calloc(n, sizeof(u32));
     u32 * coloreo = calloc(n, sizeof(u32));
-
+    u32 * mejor_coloreo_array = calloc(n, sizeof(u32));
 
     // crea orden natural
     for (u32 i = 0 ; i < n; ++i) {
         orden[i] = i;
     }
     cantidad_colores_usados = Greedy(g, orden, coloreo);
+    ++cantidad_greedys;
+    // hacer 3*beta reordenamientos {
+        //de vuelta chequearlo
+    //}
+    if (cantidad_colores_usados<menor_coloreo) {
+        menor_coloreo = cantidad_colores_usados;
+        for (u32 i=0u; i < n ; ++i) {
+            mejor_coloreo_array[i] = coloreo[i];
+        }
+    }
     printf("Cantidad de colores que usa Greedy en ON: %u\n", cantidad_colores_usados);
+
 
     // crea orden Welsh-Powell
     for (u32 i = 0 ; i < n; ++i) {
@@ -65,8 +78,16 @@ int main(int argc, char* argv[]){
     }
     error = OrdenFromKey(n, key, orden);
     cantidad_colores_usados = Greedy(g, orden, coloreo);
+    ++cantidad_greedys;
+    if (cantidad_colores_usados<menor_coloreo) {
+        menor_coloreo = cantidad_colores_usados;
+        for (u32 i=0u; i < n ; ++i) {
+            mejor_coloreo_array[i] = coloreo[i];
+        }
+    }
     printf("Cantidad de colores que usa Greedy en Welsh-Powell: %u\n", cantidad_colores_usados);
 
+    // alpha Greedy's
     for(int i = 0; i < alpha; ++i) {
         srand(rho);
         R = rand();
@@ -75,8 +96,29 @@ int main(int argc, char* argv[]){
         error = OrdenFromKey(n, key, orden);
         error = error;
         cantidad_colores_usados = Greedy(g, orden, coloreo);
+        if (cantidad_colores_usados<menor_coloreo) {
+            menor_coloreo = cantidad_colores_usados;
+            for (u32 i=0u; i < n ; ++i) {
+                mejor_coloreo_array[i] = coloreo[i];
+            }
+        }
         printf("Cantidad de colores que usa Greedy en reordenamiento %u: %u\n",i+3, cantidad_colores_usados);
+        for (int j = 0; j < beta; ++j) {
+            error = OrdenFromKey(n, coloreo, orden);
+            cantidad_colores_usados = Greedy(g, orden, coloreo);
+            printf("Cantidad de colores que usa Greedy en reordenamiento %u VIT-iterando %u veces (1): %u\n", j+1, i+3, cantidad_colores_usados);
+            
+        }
     }
+
+    // 3*beta Greedy's
+    for (int i=0; i < beta ; ++i) {
+        error = OrdenFromKey(n, mejor_coloreo_array, orden);
+        cantidad_colores_usados = Greedy(g, orden, coloreo);
+        cantidad_colores_usados = Greedy(g, orden, coloreo);
+        cantidad_colores_usados = Greedy(g, orden, coloreo);
+    }
+
 
 
 

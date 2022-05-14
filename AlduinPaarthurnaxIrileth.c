@@ -81,40 +81,49 @@ u32 Greedy(Grafo G,u32* Orden,u32* Coloreo) {
     }
 
     bool * available = calloc(n,sizeof(bool));
-    for (unsigned int cr = 0u; cr < n; ++cr) {
-        available[cr] = true;
-    }
+    if (available != NULL) {
+        for (unsigned int cr = 0u; cr < n; ++cr) {
+            available[cr] = true;
+        }
 
-    for (unsigned int i = 1u; i < n; ++i) {
-        u32 index_i = Orden[i];
+        for (unsigned int i = 1u; i < n; ++i) {
+            u32 index_i = Orden[i];
 
-        u32 grado_i = Grado(index_i,G);
-        for (u32 j = 0u; j < grado_i; ++j) {
-            if (Coloreo[IndiceONVecino(j,index_i,G)]!=UINT32_MAX) {
-                available[Coloreo[IndiceONVecino(j,index_i,G)]] = false;
+            u32 grado_i = Grado(index_i,G);
+            for (u32 j = 0u; j < grado_i; ++j) {
+                if (Coloreo[IndiceONVecino(j,index_i,G)]!=UINT32_MAX) {
+                    available[Coloreo[IndiceONVecino(j,index_i,G)]] = false;
+                }
+            }
+
+            unsigned int cr=0u;
+            while (cr < n) {
+                if (available[cr])
+                    break;
+                ++cr;
+            }
+
+            Coloreo[index_i] = cr;
+
+            if (cr+1u > cant_colores)
+                ++cant_colores;
+
+            for (u32 j = 0u; j < grado_i; ++j) {
+                if (Coloreo[IndiceONVecino(j,index_i,G)]!=UINT32_MAX) {
+                    available[Coloreo[IndiceONVecino(j,index_i,G)]] = true;
+                }
             }
         }
-
-        unsigned int cr=0u;
-        while (cr < n) {
-            if (available[cr])
-                break;
-            ++cr;
-        }
-
-        Coloreo[index_i] = cr;
-
-        if (cr+1u > cant_colores)
-            ++cant_colores;
-
-        for (u32 j = 0u; j < grado_i; ++j) {
-            if (Coloreo[IndiceONVecino(j,index_i,G)]!=UINT32_MAX) {
-                available[Coloreo[IndiceONVecino(j,index_i,G)]] = true;
-            }
-        }
+        free(available);
+        available = NULL;
+    } else {
+        cant_colores =  UINT32_MAX;
     }
-    free(available);
-    available = NULL;
+
+    // Sheogorath insistió en que obviamente esto es absurdo...
+    if (Delta(G)+1<cant_colores) {
+        cant_colores = UINT32_MAX;
+    }
 
     return cant_colores;
 }
