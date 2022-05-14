@@ -66,6 +66,7 @@ u32* Bipartito(Grafo  G) {
             break;
         }
     }
+    stack_destroy(vertex_stack);
 
     return colores;
 }

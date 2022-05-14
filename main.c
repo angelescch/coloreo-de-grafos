@@ -1,3 +1,5 @@
+//gcc -Wall -Werror -Wextra -pedantic -std=c99 -c AlduinPaarthurnaxIrileth.c AniquilamientoPositronicoIonizanteGravitatorio.c Stack.c
+//gcc -Wall -Werror -Wextra -pedantic -std=c99 AniquilamientoPositronicoIonizanteGravitatorio.o Stack.o AlduinPaarthurnaxIrileth.o -o test main.c
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>
@@ -6,11 +8,22 @@
 #include "AlduinPaarthurnaxIrileth.h"
 #include "AniquilamientoPositronicoIonizanteGravitatorio.h"
 
-static void ActualizarMejorColoreo(u32 n, u32* MejorColoreo, u32* Coloreo) {
+static void ActualizarMejorColoreo(u32 n, u32* mejor_coloreo_array, u32* coloreo) {
     for (u32 i=0u; i < n ; ++i) {
-        MejorColoreo[i] = Coloreo[i];
+        mejor_coloreo_array[i] = coloreo[i];
     }
 }
+
+// static bool isProperColoring(Grafo G, u32* coloreo) {
+//     bool is_proper = true;
+//     u32 n = NumeroDeVertices(G);
+//     for(u32 i = 0u; i < n && is_proper; ++i) {
+//         for(u32 j=0u; j < Grado(i, G) && is_proper; ++j) {
+//             if (coloreo[i]==coloreo[IndiceONVecino(j,i,G)]) is_proper = false;
+//         }
+//     }
+//     return is_proper;
+// }
 
 int main(int argc, char* argv[]){
     argc = argc;
@@ -53,10 +66,10 @@ int main(int argc, char* argv[]){
     } else {
         printf("\nEl grafo no es bipartito\n");
     }
+    // bool b = isProperColoring(g, colorcitos);
+    // printf("es propio?: %d", b);
     free(colorcitos);
 
-//gcc -Wall -Werror -Wextra -pedantic -std=c99 -c AlduinPaarthurnaxIrileth.c AniquilamientoPositronicoIonizanteGravitatorio.c Stack.c
-//gcc -Wall -Werror -Wextra -pedantic -std=c99 AniquilamientoPositronicoIonizanteGravitatorio.o Stack.o AlduinPaarthurnaxIrileth.o -o test main.c
 
 
 
@@ -80,7 +93,7 @@ int main(int argc, char* argv[]){
         menor_coloreo = cantidad_colores_usados;
         ActualizarMejorColoreo(n, mejor_coloreo_array, coloreo);
     }
-    //printf("\n\nCantidad de colores que usa Greedy en ON: %u\n", cantidad_colores_usados);
+    printf("\n\nCantidad de colores que usa Greedy en ON: %u\n", cantidad_colores_usados);
     for (int j = 0; j < beta; ++j) {
         cantidad_colores_usados_anteriormente = cantidad_colores_usados;
         error = OrdenFromKey(n, coloreo, orden);
@@ -142,7 +155,7 @@ int main(int argc, char* argv[]){
         menor_coloreo = cantidad_colores_usados;
         ActualizarMejorColoreo(n, mejor_coloreo_array, coloreo);
     }
-    //printf("\n\nCantidad de colores que usa Greedy en Welsh-Powell: %u\n", cantidad_colores_usados);
+    printf("\n\nCantidad de colores que usa Greedy en Welsh-Powell: %u\n", cantidad_colores_usados);
     for (int j = 0; j < beta; ++j) {
         cantidad_colores_usados_anteriormente = cantidad_colores_usados;
         error = OrdenFromKey(n, coloreo, orden);
@@ -265,5 +278,43 @@ int main(int argc, char* argv[]){
 
     DestruccionDelGrafo(g);
 
+
+    // u32 colores_usados = Greedy(g, orden, coloreo);
+    // for (u32 i= 0; i < n; i++) {
+    //     printf("coloreo de greedy[%u]: %u\n",i,coloreo[i]);
+    // }
+
+    // AleatorizarKeys(n, 457568,key);
+    // for (u32 i= 0; i < n; i++) {
+    //     printf("key[%u]: %u\n",i,key[i]);
+    // }
+
+    // char h = OrdenFromKey(n,key,orden);
+    // h = h;
+    // for (u32 i= 0; i < n; i++) {
+    //     printf("orden[%u]: %u\n",i,orden[i]);
+    // }
+    // u32* coloreonovo = PermutarColores(n,coloreo, 4);
+    // for (u32 i= 0; i < n; i++) {
+    //     printf("permutado coloreo de greedy[%u]: %u\n",i,coloreonovo[i]);
+    // }
+
+    // u32 *RecoloreoCardinal = RecoloreoCardinalidadDecrecienteBC(n, coloreo);
+    // for (u32 i= 0; i < n; i++) {
+    //     printf("recoloreo de greedy[%u]: %u\n",i,RecoloreoCardinal[i]);
+    // }
+
+    // free(key);
+    // free(orden);
+    // free(coloreo);
+    // free(coloreonovo);
+    // free(RecoloreoCardinal);
+    // DestruccionDelGrafo(g);
+    // // clock_t start = clock();
+    // u32 colores_usados = Greedy(g, orden, colorcitos);
+    // clock_t end = clock();
+    // float seconds = (float)(end - start) / CLOCKS_PER_SEC;
+    // printf("cantidad de colores que usa Greedy: %u\n", colores_usados);
+    // printf("tarda %f\n",seconds);
     return EXIT_SUCCESS;
 }
