@@ -1,12 +1,12 @@
-//gcc -Wall -Werror -Wextra -pedantic -std=c99 -c AlduinPaarthurnaxIrileth.c AniquilamientoPositronicoIonizanteGravitatorio.c queue.c
-//gcc -Wall -Werror -Wextra -pedantic -std=c99 AniquilamientoPositronicoIonizanteGravitatorio.o queue.o AlduinPaarthurnaxIrileth.o -o test main.c
+//gcc -Wall -Werror -Wextra -pedantic -std=c99 -c FuncionesColoreo.c AlmacenamientoGrafo.c queue.c
+//gcc -Wall -Werror -Wextra -pedantic -std=c99 AlmacenamientoGrafo.o queue.o FuncionesColoreo.o -o test main.c
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>
 #include <time.h>
 #include <inttypes.h>
-#include "AlduinPaarthurnaxIrileth.h"
-#include "AniquilamientoPositronicoIonizanteGravitatorio.h"
+#include "FuncionesColoreo.h"
+#include "AlmacenamientoGrafo.h"
 
 static void ActualizarMejorColoreo(u32 n, u32* mejor_coloreo_array, u32* coloreo) {
     for (u32 i=0u; i < n ; ++i) {

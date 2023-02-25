@@ -3,7 +3,7 @@
 #include <string.h>
 #include <stdbool.h>
 
-#include "AniquilamientoPositronicoIonizanteGravitatorio.h"
+#include "AlmacenamientoGrafo.h"
 
 static void next_line() {
     char initial;
