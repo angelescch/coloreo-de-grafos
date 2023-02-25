@@ -5,7 +5,6 @@
 
 #include "AlduinPaarthurnaxIrileth.h"
 #include "queue.h"
-// #include "Stack.h"
 
 typedef struct tuple_s* tuple;
 
@@ -30,60 +29,47 @@ static int sort_tuple(const void *a, const void *b) {
     return res;
 }
 
-static bool isProperColoring(Grafo G, u32* coloreo) {
-    bool is_proper = true;
-    u32 n = NumeroDeVertices(G);
-    for(u32 i = 0u; i < n && is_proper; ++i) {
-        for(u32 j=0u; j < Grado(i, G) && is_proper; ++j) {
-            if (coloreo[i]==coloreo[IndiceONVecino(j,i,G)]) is_proper = false;
-        }
-    }
-    return is_proper;
-}
 
-u32* Bipartito(Grafo  G) {
+u32* Bipartito(Grafo G) {
     u32 n = NumeroDeVertices(G);
     u32 * colores = calloc(n, sizeof(u32));
     queue vertex_queue = queue_empty();
-    colores[0u] = 1u;
-    u32 grado_0 = Grado(0u,G);
+    colores[0u] = 1;
+    u32 v_colored = 1;
+    vertex_queue = queue_enqueue(vertex_queue, 0u);
 
-    for (u32 j=0u; j < grado_0;++j) {
-        vertex_queue = queue_enqueue(vertex_queue, IndiceONVecino(j,0u,G));
-    }
+    u32 breaking = 0;
+    u32 k = 1;
 
-    while (!queue_is_empty(vertex_queue)) {
-        bool posible_1 = true;
-        bool posible_2 = true;
+    while (!queue_is_empty(vertex_queue) && v_colored < n && !breaking) {
         u32 i = queue_first(vertex_queue);
         vertex_queue = queue_dequeue(vertex_queue);
 
-        for (u32 j=0u; j < Grado(i,G) ;++j) {
+        for (u32 j=0u; j < Grado(i,G) && !breaking ;++j) {
             u32 vec_index = IndiceONVecino(j,i,G);
-            if (colores[vec_index]==1u) {
-                posible_1 = false;
-            } else if (colores[vec_index]==2u) {
-                posible_2 = false;
-            } else if (colores[vec_index]==0u) {
+            if (colores[vec_index]==0u) {
+                colores[vec_index] = 3 - colores[i];
+                v_colored++;
                 vertex_queue = queue_enqueue(vertex_queue, vec_index);
+            } else if (colores[vec_index]==colores[i]) {
+                breaking = 1;
             }
         }
 
-        if (posible_1) {
-            colores[i] = 1u;
-        } else if (posible_2) {
-            colores[i] = 2u;
-        } else {
-            free(colores);
-            colores = NULL;
-            break;
+        if (queue_is_empty(vertex_queue) && v_colored < n) {
+            while(colores[k]!=0u){ 
+                k++;
+            }
+            if (k < n) {
+                colores[k] = 1u;
+                v_colored++;
+                vertex_queue = queue_enqueue(vertex_queue, k);
+            }
         }
     }
     queue_destroy(vertex_queue);
 
-    bool b = isProperColoring(G, colores);
-
-    if(!b){
+    if(breaking){
         free(colores);
         colores = NULL;
     }
@@ -91,47 +77,6 @@ u32* Bipartito(Grafo  G) {
     return colores;
 }
 
-// u32* Bipartito(Grafo  G) {
-//     u32 n = NumeroDeVertices(G);
-//     u32 * colores = calloc(n, sizeof(u32));
-//     stack vertex_queue = stack_empty();
-//     colores[0u] = 1u;
-//     u32 grado_0 = Grado(0u,G);
-
-//     for (u32 j=0u; j < grado_0;++j) {
-//         vertex_queue = stack_push(vertex_queue, IndiceONVecino(j,0u,G));
-//     }
-
-//     while (!stack_is_empty(vertex_queue)) {
-//         bool posible_1 = true;
-//         bool posible_2 = true;
-//         u32 i = stack_top(vertex_queue);
-//         vertex_queue = stack_pop(vertex_queue);
-
-//         for (u32 j=0u; j < Grado(i,G) ;++j) {
-//             if (colores[IndiceONVecino(j,i,G)]==1u) {
-//                 posible_1 = false; 
-//             } else if (colores[IndiceONVecino(j,i,G)]==2u) {
-//                 posible_2 = false;
-//             } else if (colores[IndiceONVecino(j,i,G)]==0u) {
-//                 vertex_queue = stack_push(vertex_queue, IndiceONVecino(j,i,G));
-//             }
-//         }
-
-//         if (posible_1) {
-//             colores[i] = 1u;
-//         } else if (posible_2) {
-//             colores[i] = 2u;
-//         } else {
-//             free(colores);
-//             colores = NULL;
-//             break;
-//         }
-//     }
-//     stack_destroy(vertex_queue);
-
-//     return colores;
-// }
 
 u32 Greedy(Grafo G,u32* Orden,u32* Coloreo) {
     u32 n = NumeroDeVertices(G);
@@ -193,7 +138,6 @@ u32 Greedy(Grafo G,u32* Orden,u32* Coloreo) {
 
 
 //ordenamiento a partir de clave
-
 char OrdenFromKey(u32 n,u32* key,u32* Orden) {
     tuple value_index = calloc(n, sizeof(struct tuple_s));
     if (value_index == NULL)
@@ -215,8 +159,8 @@ char OrdenFromKey(u32 n,u32* key,u32* Orden) {
     return '0';
 }
 
-//claves aleatorias
 
+//claves aleatorias
 void AleatorizarKeys(u32 n,u32 R,u32* key) {
     for (u32 i=0u; i < n ;++i) {
         srand(R+i);
@@ -253,7 +197,6 @@ u32* PermutarColores(u32 n,u32* Coloreo,u32 R) {
 
     return ColoreoNuevo;
 }
-
 
 
 u32* RecoloreoCardinalidadDecrecienteBC(u32 n,u32* Coloreo) {
