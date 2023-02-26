@@ -22,7 +22,7 @@ $ cd coloreo-de-grafos
 $ gcc -Wall -Werror -Wextra -pedantic -std=c99 -c FuncionesColoreo.c
 AlmacenamientoGrafo.c queue.c
 $ gcc -Wall -Werror -Wextra -pedantic -std=c99 AlmacenamientoGrafo.o queue.o
-FuncionesColoreo.o -o test main.c
+FuncionesColoreo.o -o coloreo main.c
 $ ./coloreo alpha beta rho < nombre_de_archivo
 ```
 donde nombre_de_archivo será el archivo que contiene el grafo siguiendo el
