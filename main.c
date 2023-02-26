@@ -1,5 +1,5 @@
 //gcc -Wall -Werror -Wextra -pedantic -std=c99 -c FuncionesColoreo.c AlmacenamientoGrafo.c queue.c
-//gcc -Wall -Werror -Wextra -pedantic -std=c99 AlmacenamientoGrafo.o queue.o FuncionesColoreo.o -o test main.c
+//gcc -Wall -Werror -Wextra -pedantic -std=c99 AlmacenamientoGrafo.o queue.o FuncionesColoreo.o -o coloreo main.c
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>
@@ -50,25 +50,25 @@ int main(int argc, char* argv[]){
     u32* colorcitos = Bipartito(g);
     if(colorcitos!=NULL){
         if (isProperColoring(g, colorcitos)) {
-            printf("El grafo es bipartito\n");
+            printf("\nEl grafo es bipartito\n");
             if (n < 101) {
-                printf("\n\nListado de vértices de la Primera Parte:\n");
+                printf("\nListado de vértices de la Primera Parte:\n");
                 printf("[");
                 for (u32 i; i<n ;++i) {
                     if (colorcitos[i]==1) {
-                        printf("%u ,", Nombre(i,g));
+                        printf(" %u ", Nombre(i,g));
                     }
                 }
-                printf("]\n\n");
+                printf("]\n");
 
-                printf("\n\nListado de vértices de la Segunda Parte:\n");
+                printf("\nListado de vértices de la Segunda Parte:\n");
                 printf("[");
                 for (u32 i; i<n ;++i) {
                     if (colorcitos[i]==2) {
-                        printf("%u ,", Nombre(i,g));
+                        printf(" %u ", Nombre(i,g));
                     }
                 }
-                printf("]\n\n");
+                printf("]\n");
             }
         } else {
             printf("El coloreo con dos colores no es propio\n");
@@ -278,7 +278,7 @@ int main(int argc, char* argv[]){
     printf("\n\nMenor coloreo obtenido: %u\n", menor_coloreo);
     printf("Se hicieron en total %u Greedy's\n\n", cantidad_greedys);
 
-    printf("Tiempo de cálculo: %f seconds\n\n", time_spent);
+    printf("Tiempo de cálculo: %f segundos\n\n", time_spent);
 
     for (u32 i= 0; i < n; i++) {
         printf("mejor coloreo de greedy[%u]: %u\n",i,mejor_coloreo_array[i]);
