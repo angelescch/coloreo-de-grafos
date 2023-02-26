@@ -23,12 +23,19 @@ $ gcc -Wall -Werror -Wextra -pedantic -std=c99 -c FuncionesColoreo.c
 AlmacenamientoGrafo.c queue.c
 $ gcc -Wall -Werror -Wextra -pedantic -std=c99 AlmacenamientoGrafo.o queue.o
 FuncionesColoreo.o -o coloreo main.c
-$ ./coloreo alpha beta rho < nombre_de_archivo
+$ ./coloreo alpha beta rho < path_al_archivo
 ```
-donde nombre_de_archivo será el archivo que contiene el grafo siguiendo el
-formato válido especificado a continuación. alpha, beta y rho serán los valores
-que tomen las variables α, β, ρ ya que estas determinan la cantidad de
+donde path_al_archivo será la ruta al archivo que contiene el grafo siguiendo
+el formato válido especificado a continuación. alpha, beta y rho serán los
+valores que tomen las variables α, β, ρ ya que estas determinan la cantidad de
 reordenamientos que se van a realizar.
+
+Con los grafos provistos en la carpeta grafos-de-ejemplo, podemos hacer:
+```shell
+$ ./coloreo 23 56 5 < grafos-de-ejemplo/q10.corr.txt > resultados
+```
+Y en el archivo ```resultados``` que acabamos de generar podremos ver todo lo
+que se imprimió.
 
 ## Formato Válido de Entrada para grafos
 El formato de entrada será una variación de DIMACS, que es un formato
